@@ -120,8 +120,13 @@ body{
 <script>
 const degree = 220;
 
+// Umrechnung:
+// CSS: 0° = Osten
+// Windrichtung: 0° = Norden
+const rotation = degree - 90;
+
 document.getElementById("arrow").style.transform =
-`rotate(${degree + 90}deg)`;
+`rotate(${rotation}deg)`;
 
 document.getElementById("info").innerText =
 `Wind kommt aus: ${degree}°`;

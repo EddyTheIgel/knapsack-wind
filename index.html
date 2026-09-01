@@ -1,136 +1,34 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Knapsack Wind</title>
-
-<style>
-body{
-    margin:0;
-    background:#000;
-    color:white;
-    font-family:Arial,sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.container{
-    text-align:center;
-}
-
-#compass{
-    width:320px;
-    height:320px;
-    border:6px solid white;
-    border-radius:50%;
-    position:relative;
-    margin:auto;
-}
-
-.direction{
-    position:absolute;
-    font-size:48px;
-    font-weight:bold;
-}
-
-.n{
-    top:15px;
-    left:50%;
-    transform:translateX(-50%);
-}
-
-.s{
-    bottom:15px;
-    left:50%;
-    transform:translateX(-50%);
-}
-
-.w{
-    left:15px;
-    top:50%;
-    transform:translateY(-50%);
-}
-
-.e{
-    right:15px;
-    top:50%;
-    transform:translateY(-50%);
-}
-
-#arrow{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:140px;
-    height:10px;
-    background:red;
-    transform-origin:0% 50%;
-}
-
-#arrow::after{
-    content:"";
-    position:absolute;
-    right:-18px;
-    top:-10px;
-    border-left:25px solid red;
-    border-top:15px solid transparent;
-    border-bottom:15px solid transparent;
-}
-
-#center{
-    position:absolute;
-    width:18px;
-    height:18px;
-    background:white;
-    border-radius:50%;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-}
-
-#info{
-    margin-top:40px;
-    font-size:32px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-    <div id="compass">
-        <div class="direction n">N</div>
-        <div class="direction e">E</div>
-        <div class="direction s">S</div>
-        <div class="direction w">W</div>
-
-        <div id="arrow"></div>
-        <div id="center"></div>
-    </div>
-
-    <div id="info"></div>
-
-</div>
-
 <script>
-const degree = 220;
 
-// Umrechnung:
-// CSS: 0° = Osten
-// Windrichtung: 0° = Norden
-const rotation = degree - 90;
+async function updateWind() {
+  try {
+    const response = await fetch(
+      "https://little-night-a9ab.winkelmesser.workers.dev/"
+    );
 
-document.getElementById("arrow").style.transform =
-`rotate(${rotation}deg)`;
+    const data = await response.json();
 
-document.getElementById("info").innerText =
-`Wind kommt aus: ${degree}°`;
+    const degree = data.direction;
+    const speed = data.speed;
+
+    // CSS verwendet 0° = Osten
+    // Wetterdaten verwenden 0° = Norden
+    const rotation = degree - 90;
+
+    document.getElementById("arrow").style.transform =
+      `rotate(${rotation}deg)`;
+
+    document.getElementById("info").innerText =
+      `Wind kommt aus: ${degree}° | ${speed} m/s`;
+
+  } catch (error) {
+    document.getElementById("info").innerText =
+      "Fehler beim Laden der Wetterdaten";
+    console.error(error);
+  }
+}
+
+updateWind();
+setInterval(updateWind, 60000);
+
 </script>
-
-</body>
-</html>

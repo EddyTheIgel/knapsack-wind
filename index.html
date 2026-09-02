@@ -229,9 +229,10 @@ async function loadWind(){
         const data = await response.json();
 
         console.log("API Daten:", data);
+alert(JSON.stringify(data));
 
-        const degree = data.direction;
-        const speed = data.speed;
+const degree = data.direction;
+const speed = data.speed;
 
         const rotation = degree - 90;
 

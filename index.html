@@ -180,13 +180,28 @@ function switchStation(station){
 
     currentStation = station;
 
+    const btnKnapsack =
+        document.getElementById("btnKnapsack");
+
+    const btnHermuelheim =
+        document.getElementById("btnHermuelheim");
+
+    btnKnapsack.classList.remove("active");
+    btnHermuelheim.classList.remove("active");
+
     if(station === "knapsack"){
+
         document.getElementById("stationTitle").innerText =
             "Messstation Chemiepark Knapsack";
-    }
-    else{
+
+        btnKnapsack.classList.add("active");
+
+    }else{
+
         document.getElementById("stationTitle").innerText =
-            "Messstation Hermülheim Feuer- und Rettungswache";
+            "Messstation Hermülheim Feuerwehr";
+
+        btnHermuelheim.classList.add("active");
     }
 
     loadWind();

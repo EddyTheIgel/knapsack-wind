@@ -22,6 +22,19 @@ body{
     text-align:center;
 }
 
+#buttons{
+    margin-bottom:20px;
+}
+
+#buttons button{
+    font-size:22px;
+    padding:10px 20px;
+    margin:0 10px;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+}
+
 #compass{
     width:320px;
     height:320px;
@@ -68,7 +81,6 @@ body{
     width:140px;
     height:10px;
     background:red;
-
     transform:translateY(-50%);
     transform-origin:0% 50%;
 }
@@ -104,16 +116,6 @@ h1{
     margin-bottom:30px;
     color:white;
 }
-#buttons{
-    margin-bottom:20px;
-}
-
-#buttons button{
-    font-size:22px;
-    padding:10px 20px;
-    margin:0 10px;
-    cursor:pointer;
-}    
 </style>
 
 </head>
@@ -122,19 +124,22 @@ h1{
 
 <div class="container">
 
-    <h1 id="stationTitle">Messstation Chemiepark Knapsack</h1>
+    <h1 id="stationTitle">
+        Messstation Chemiepark Knapsack
+    </h1>
 
     <div id="buttons">
-    <button onclick="switchStation('knapsack')">
-        Chemiepark
-    </button>
+        <button onclick="switchStation('knapsack')">
+            Chemiepark
+        </button>
 
-    <button onclick="switchStation('hermuelheim')">
-        Hermülheim
-    </button>
-</div>
+        <button onclick="switchStation('hermuelheim')">
+            Hermülheim
+        </button>
+    </div>
 
     <div id="compass">
+
         <div class="direction n">N</div>
         <div class="direction e">E</div>
         <div class="direction s">S</div>
@@ -142,9 +147,12 @@ h1{
 
         <div id="arrow"></div>
         <div id="center"></div>
+
     </div>
 
-    <div id="info">Lade Wetterdaten...</div>
+    <div id="info">
+        Lade Wetterdaten...
+    </div>
 
 </div>
 
@@ -159,31 +167,31 @@ function switchStation(station){
     if(station === "knapsack"){
         document.getElementById("stationTitle").innerText =
             "Messstation Chemiepark Knapsack";
-    } else {
+    }
+    else{
         document.getElementById("stationTitle").innerText =
             "Messstation Hermülheim Feuer- und Rettungswache";
     }
 
     loadWind();
 }
-    
-async function loadWind() {
 
-    try {
+async function loadWind(){
 
-       let apiUrl;
+    try{
 
-if(currentStation === "knapsack"){
-    apiUrl =
-        "https://little-night-a9ab.knapsack-tools.workers.dev/";
-}
-else{
-    apiUrl =
-        "https://hermuelheim-wind.knapsack-tools.workers.dev/";
-}
+        let apiUrl;
 
-const response = await fetch(apiUrl);
-);
+        if(currentStation === "knapsack"){
+            apiUrl =
+            "https://little-night-a9ab.knapsack-tools.workers.dev/";
+        }
+        else{
+            apiUrl =
+            "https://hermuelheim-wind.knapsack-tools.workers.dev/";
+        }
+
+        const response = await fetch(apiUrl);
 
         const data = await response.json();
 
@@ -193,12 +201,13 @@ const response = await fetch(apiUrl);
         const rotation = degree - 90;
 
         document.getElementById("arrow").style.transform =
-    `translateY(-50%) rotate(${rotation}deg)`;
+            `translateY(-50%) rotate(${rotation}deg)`;
 
         document.getElementById("info").innerText =
             `Wind kommt aus: ${degree}° | ${speed} m/s`;
 
-    } catch (error) {
+    }
+    catch(error){
 
         document.getElementById("info").innerText =
             "Fehler beim Laden der Wetterdaten";

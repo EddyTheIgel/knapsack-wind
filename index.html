@@ -1,3 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Knapsack Wind</title>
+
+<style>
+body{
+    margin:0;
+    background:#000;
+    color:white;
+    font-family:Arial,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    text-align:center;
+}
+
+#buttons{
+    margin-bottom:20px;
+}
+
+#buttons button{
+    font-size:22px;
+    padding:10px 20px;
+    margin:0 10px;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+}
+
+#compass{
+    width:320px;
+    height:320px;
+    border:6px solid white;
+    border-radius:50%;
+    position:relative;
+    margin:auto;
+}
+
+.direction{
+    position:absolute;
+    font-size:48px;
+    font-weight:bold;
+}
+
+.n{
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.s{
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.w{
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.e{
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+#arrow{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:140px;
+    height:10px;
+    background:red;
+    transform:translateY(-50%);
+    transform-origin:0% 50%;
+}
+
+#arrow::after{
+    content:"";
+    position:absolute;
+    right:-18px;
+    top:-10px;
+    border-left:25px solid red;
+    border-top:15px solid transparent;
+    border-bottom:15px solid transparent;
+}
+
+#center{
+    position:absolute;
+    width:18px;
+    height:18px;
+    background:white;
+    border-radius:50%;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+}
+
+#info{
+    margin-top:40px;
+    font-size:32px;
+}
+
+h1{
+    font-size:36px;
+    margin-bottom:30px;
+    color:white;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 id="stationTitle">
+        Messstation Chemiepark Knapsack
+    </h1>
+
+    <div id="buttons">
+        <button onclick="switchStation('knapsack')">
+            Chemiepark
+        </button>
+
+        <button onclick="switchStation('hermuelheim')">
+            Hermülheim
+        </button>
+    </div>
+
+    <div id="compass">
+
+        <div class="direction n">N</div>
+        <div class="direction e">E</div>
+        <div class="direction s">S</div>
+        <div class="direction w">W</div>
+
+        <div id="arrow"></div>
+        <div id="center"></div>
+
+    </div>
+
+    <div id="info">
+        Lade Wetterdaten...
+    </div>
+
+</div>
+
 <script>
 
 let currentStation = "knapsack";
@@ -6,28 +164,13 @@ function switchStation(station){
 
     currentStation = station;
 
-    const btnKnapsack =
-        document.getElementById("btnKnapsack");
-
-    const btnHermuelheim =
-        document.getElementById("btnHermuelheim");
-
-    btnKnapsack.classList.remove("active");
-    btnHermuelheim.classList.remove("active");
-
     if(station === "knapsack"){
-
         document.getElementById("stationTitle").innerText =
             "Messstation Chemiepark Knapsack";
-
-        btnKnapsack.classList.add("active");
-
-    } else {
-
+    }
+    else{
         document.getElementById("stationTitle").innerText =
-            "Messstation Hermülheim Feuerwehr";
-
-        btnHermuelheim.classList.add("active");
+            "Messstation Hermülheim Feuer- und Rettungswache";
     }
 
     loadWind();
@@ -41,26 +184,19 @@ async function loadWind(){
 
         if(currentStation === "knapsack"){
             apiUrl =
-                "https://little-night-a9ab.knapsack-tools.workers.dev/";
-        } else {
-            apiUrl =
-                "https://hermuelheim-wind.knapsack-tools.workers.dev/";
+            "https://little-night-a9ab.knapsack-tools.workers.dev/";
         }
-
-        console.log("API URL:", apiUrl);
+        else{
+            apiUrl =
+            "https://hermuelheim-wind.knapsack-tools.workers.dev/";
+        }
 
         const response = await fetch(apiUrl);
 
-        if(!response.ok){
-            throw new Error("HTTP Fehler: " + response.status);
-        }
-
         const data = await response.json();
 
-        console.log("API Daten:", data);
-
-        const degree = Number(data.direction);
-        const speed = Number(data.speed);
+        const degree = data.direction;
+        const speed = data.speed;
 
         const rotation = degree - 90;
 
@@ -84,3 +220,6 @@ loadWind();
 setInterval(loadWind, 60000);
 
 </script>
+
+</body>
+</html>

@@ -224,7 +224,11 @@ async function loadWind(){
 
         const response = await fetch(apiUrl);
 
+        console.log("API URL:", apiUrl);
+
         const data = await response.json();
+
+        console.log("API Daten:", data);
 
         const degree = data.direction;
         const speed = data.speed;

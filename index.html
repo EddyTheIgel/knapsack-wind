@@ -137,7 +137,7 @@ async function loadWind() {
         const rotation = degree - 90;
 
         document.getElementById("arrow").style.transform =
-            `rotate(${rotation}deg)`;
+    `translateY(-50%) rotate(${rotation}deg)`;
 
         document.getElementById("info").innerText =
             `Wind kommt aus: ${degree}° | ${speed} m/s`;

@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Knapsack Wind</title>
+<title>Winddaten Hürth</title>
 
 <style>
+
 body{
     margin:0;
     background:#000;
@@ -15,24 +16,41 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    min-height:100vh;
 }
 
 .container{
     text-align:center;
+    padding:20px;
+}
+
+h1{
+    font-size:36px;
+    margin-bottom:25px;
 }
 
 #buttons{
-    margin-bottom:20px;
+    margin-bottom:25px;
 }
 
 #buttons button{
-    font-size:22px;
-    padding:10px 20px;
-    margin:0 10px;
+    font-size:20px;
+    padding:12px 22px;
+    margin:0 8px;
     cursor:pointer;
     border:none;
-    border-radius:8px;
+    border-radius:10px;
+    background:#333;
+    color:white;
+    transition:0.2s;
+}
+
+#buttons button:hover{
+    background:#555;
+}
+
+#buttons button.active{
+    background:#0078ff;
 }
 
 #compass{
@@ -81,8 +99,9 @@ body{
     width:140px;
     height:10px;
     background:red;
-    transform:translateY(-50%);
+
     transform-origin:0% 50%;
+    transform:translateY(-50%);
 }
 
 #arrow::after{
@@ -107,17 +126,11 @@ body{
 }
 
 #info{
-    margin-top:40px;
-    font-size:32px;
+    margin-top:35px;
+    font-size:30px;
 }
 
-h1{
-    font-size:36px;
-    margin-bottom:30px;
-    color:white;
-}
 </style>
-
 </head>
 
 <body>
@@ -129,13 +142,20 @@ h1{
     </h1>
 
     <div id="buttons">
-        <button onclick="switchStation('knapsack')">
+
+        <button
+            id="btnKnapsack"
+            class="active"
+            onclick="switchStation('knapsack')">
             Chemiepark
         </button>
 
-        <button onclick="switchStation('hermuelheim')">
+        <button
+            id="btnHermuelheim"
+            onclick="switchStation('hermuelheim')">
             Hermülheim
         </button>
+
     </div>
 
     <div id="compass">
@@ -164,13 +184,31 @@ function switchStation(station){
 
     currentStation = station;
 
+    document
+        .getElementById("btnKnapsack")
+        .classList.remove("active");
+
+    document
+        .getElementById("btnHermuelheim")
+        .classList.remove("active");
+
     if(station === "knapsack"){
+
         document.getElementById("stationTitle").innerText =
             "Messstation Chemiepark Knapsack";
-    }
-    else{
+
+        document
+            .getElementById("btnKnapsack")
+            .classList.add("active");
+
+    }else{
+
         document.getElementById("stationTitle").innerText =
             "Messstation Hermülheim Feuer- und Rettungswache";
+
+        document
+            .getElementById("btnHermuelheim")
+            .classList.add("active");
     }
 
     loadWind();
@@ -183,20 +221,28 @@ async function loadWind(){
         let apiUrl;
 
         if(currentStation === "knapsack"){
+
             apiUrl =
             "https://little-night-a9ab.knapsack-tools.workers.dev/";
-        }
-        else{
+
+        }else{
+
             apiUrl =
             "https://hermuelheim-wind.knapsack-tools.workers.dev/";
         }
 
         const response = await fetch(apiUrl);
 
+        if(!response.ok){
+            throw new Error(
+                "HTTP Fehler " + response.status
+            );
+        }
+
         const data = await response.json();
 
-        const degree = data.direction;
-        const speed = data.speed;
+        const degree = Number(data.direction);
+        const speed = Number(data.speed);
 
         const rotation = degree - 90;
 
@@ -209,10 +255,10 @@ async function loadWind(){
     }
     catch(error){
 
-        document.getElementById("info").innerText =
-            "Fehler beim Laden der Wetterdaten";
-
         console.error(error);
+
+        document.getElementById("info").innerText =
+            error.toString();
     }
 }
 

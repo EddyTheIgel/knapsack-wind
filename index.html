@@ -234,10 +234,10 @@ alert(JSON.stringify(data));
 const degree = data.direction;
 const speed = data.speed;
 
-        const rotation = degree - 90;
+        cconst rotation = degree - 90;
 
-        document.getElementById("arrow").style.transform =
-            `translateY(-50%) rotate(${rotation}deg)`;
+// TEST
+alert("Rotation: " + rotation);
 
         document.getElementById("info").innerText =
 `Wind kommt aus: ${degree}° | ${speed} m/s`;

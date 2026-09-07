@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Winddaten Hürth</title>
+
 <style>
 
 body{
@@ -35,10 +43,6 @@ h1{
     background:#333;
     color:white;
     transition:0.2s;
-}
-
-#buttons button:hover{
-    background:#555;
 }
 
 #buttons button.active{
@@ -130,17 +134,11 @@ h1{
 
     h1{
         font-size:26px;
-        margin-bottom:30px;
-    }
-
-    #buttons{
-        margin-bottom:35px;
     }
 
     #buttons button{
         font-size:18px;
         padding:14px 22px;
-        margin:0 6px;
     }
 
     #compass{
@@ -154,18 +152,127 @@ h1{
 
     #arrow{
         width:135px;
-        height:10px;
-    }
-
-    #center{
-        width:20px;
-        height:20px;
     }
 
     #info{
         font-size:26px;
-        margin-top:35px;
     }
 }
 
 </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Winddaten Hürth</h1>
+
+<div id="buttons">
+
+<button
+id="btnKnapsack"
+class="active"
+onclick="switchStation('knapsack')">
+Chemiepark
+</button>
+
+<button
+id="btnHermuelheim"
+onclick="switchStation('hermuelheim')">
+Feuerwehr
+</button>
+
+</div>
+
+<div id="compass">
+
+<div class="direction n">N</div>
+<div class="direction e">E</div>
+<div class="direction s">S</div>
+<div class="direction w">W</div>
+
+<div id="arrow"></div>
+<div id="center"></div>
+
+</div>
+
+<div id="info">
+Lade Wetterdaten...
+</div>
+
+</div>
+
+<script>
+
+let currentStation = "knapsack";
+
+function switchStation(station){
+
+    currentStation = station;
+
+    document.getElementById("btnKnapsack")
+        .classList.remove("active");
+
+    document.getElementById("btnHermuelheim")
+        .classList.remove("active");
+
+    if(station === "knapsack"){
+
+        document.getElementById("btnKnapsack")
+            .classList.add("active");
+
+    }else{
+
+        document.getElementById("btnHermuelheim")
+            .classList.add("active");
+    }
+
+    loadWind();
+}
+
+async function loadWind(){
+
+    try{
+
+        let apiUrl;
+
+        if(currentStation === "knapsack"){
+
+            apiUrl =
+            "https://little-night-a9ab.knapsack-tools.workers.dev/";
+
+        }else{
+
+            apiUrl =
+            "https://hermuelheim-wind.knapsack-tools.workers.dev/";
+        }
+
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        const degree = Number(data.direction);
+        const speed = Number(data.speed);
+
+        document.getElementById("arrow").style.transform =
+        `translateY(-50%) rotate(${degree-90}deg)`;
+
+        document.getElementById("info").innerHTML =
+        `Wind kommt aus: ${degree}°<br>${speed} m/s`;
+
+    }
+    catch(error){
+
+        document.getElementById("info").innerText =
+        "Fehler beim Laden der Daten";
+    }
+}
+
+switchStation("knapsack");
+
+setInterval(loadWind,60000);
+
+</script>
+
+</body>
+</html>

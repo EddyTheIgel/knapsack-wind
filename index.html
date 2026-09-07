@@ -19,14 +19,13 @@ body{
     text-align:center;
     max-width:700px;
     margin:auto;
-    padding:0 15px 20px 15px;
+    padding:10px 15px 20px 15px;
 }
 
 h1{
-    font-size:24px;
-    line-height:1.1;
-    margin-top:10px;
-    margin-bottom:15px;
+    font-size:34px;
+    font-weight:bold;
+    margin:10px 0 20px 0;
 }
 
 #buttons{
@@ -133,7 +132,7 @@ h1{
 @media (max-width:600px){
 
     h1{
-        font-size:22px;
+        font-size:30px;
     }
 
     #buttons button{
@@ -166,9 +165,7 @@ h1{
 
 <div class="container">
 
-<h1 id="stationTitle">
-Messstation Chemiepark Knapsack
-</h1>
+<h1>Winddaten Hürth</h1>
 
 <div id="buttons">
 
@@ -182,7 +179,7 @@ Chemiepark
 <button
 id="btnHermuelheim"
 onclick="switchStation('hermuelheim')">
-Hermülheim
+Feuerwehr
 </button>
 
 </div>
@@ -223,17 +220,11 @@ function switchStation(station){
 
     if(station === "knapsack"){
 
-        document.getElementById("stationTitle").innerHTML =
-"Winddaten Hürth";
-
         document
             .getElementById("btnKnapsack")
             .classList.add("active");
 
     }else{
-
-        document.getElementById("stationTitle").innerHTML =
-        "Hermülheim<br>Feuer- und Rettungswache";
 
         document
             .getElementById("btnHermuelheim")
